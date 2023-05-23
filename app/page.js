@@ -5,7 +5,7 @@ import Loader from '@/components/Loader'
 import ABI from './abi/ABI.json'
 import TokenABI from './abi/TokenABI.json'
 import 'react-toastify/dist/ReactToastify.css';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 
 const ethers = require("ethers")
 
@@ -15,6 +15,7 @@ export default function Home() {
   const [coin, setCoin] = useState(0)
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState('')
+  const [success, Setsuccess] = useState(false)
   const [num, setNum] = useState('00')
   const options = ['Number Greater Than 5', 'Number Less Than 5', 'Number Equal To 5']
   const whitemod_flag = true
@@ -51,10 +52,18 @@ export default function Home() {
       await tx.wait();
       const balanceAfter = await TokenContract.balanceOf(contractAddress);
       const number = await contract.number()
-      setLoading(false)
       setNum(Number(number))
-      if (balanceBefore < balanceAfter)
+      setLoading(false)
+      fireToast("success", "Transaction Successful")
+      if (balanceBefore < balanceAfter) {
+
         setResult("you are win and get 2X Token");
+        Setsuccess(true)
+        setTimeout(() => {
+          Setsuccess(false)
+        }, 1000);
+
+      }
       else if (balanceBefore > balanceAfter)
         setResult("You Lose..Better Luck Next Time");
     }
@@ -63,8 +72,6 @@ export default function Home() {
 
       if (await msg.includes("execution reverted: Currently Betting is risky.")) {
         fireToast("error", "Currently Betting is risky.")
-        console.log("fire");
-
       }
     }
     finally {
@@ -122,8 +129,12 @@ export default function Home() {
       });
     }
   }
+  const style = {
+    coinNumber: `text-black`
+  }
   return (
     <div className='grid grid-cols-1 w-full text-center p-10 bg-white'>
+      <ToastContainer />
       <div className='justify-self-center grid grid-cols-4 w-full h-80 bg-red-500 rounded-lg'>
         <div><p className='m-4 font-sans text-white font-bold text-2xl drop-shadow-lg'>CASINO</p></div>
         <div className='col-span-2 pt-10'>
@@ -132,16 +143,55 @@ export default function Home() {
           </p>
           <p className='bg-black text-white rounded-lg'> {options[option - 1]} | Amount : {coin} </p>
           <p className='text-9xl font-mono'>{num}</p>
-          <p className="bg-white rounded-full font-sans">{result}</p>
+          <p className="bg-white rounded-full font-sans text-black">{result}</p>
         </div>
         <div className='justify-self-end '>
 
         </div>
+        {
+          success
+            ?
+
+            <div class="confetti">
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+              <div class="confetti-piece"></div>
+            </div>
+            : <></>}
       </div>
       {
         loading
           ?
-          <div className='grid grid-cols-1'><Loader className='justify-self-center' /></div>
+          <div className='flex'><Loader className='justify-self-center' /></div>
           :
           <>
             <div className='grid grid-cols-3 h-48 rounded py-10 '>
@@ -167,63 +217,53 @@ export default function Home() {
             <div className='grid grid-cols-5 py-10 '>
               <div className='rounded-full mx-6 grid grid-cols-1 justify-items-center h-fit'>
                 <Image
-                  src="/coin.png"
+                  src="/10.png"
                   width={150}
                   height={150}
                   alt="Picture of the author"
                   className='items-centerr'
                   onClick={() => setCoin(10)} />
-                <p>
-                  10
-                </p>
+
               </div>
               <div className='rounded-full mx-6 grid grid-cols-1 justify-items-center h-fit'>
                 <Image
-                  src="/coin.png"
+                  src="/100.png"
                   width={150}
                   height={150}
                   alt="Picture of the author"
                   className='items-centerr'
                   onClick={() => setCoin(100)} />
-                <p>
-                  100
-                </p>
+
               </div>
               <div className='rounded-full mx-6 grid grid-cols-1 justify-items-center  h-fit'>
                 <Image
-                  src="/coin.png"
+                  src="/200.png"
                   width={150}
                   height={150}
                   alt="Picture of the author"
                   className='items-centerr'
                   onClick={() => setCoin(200)} />
-                <p>
-                  200
-                </p>
+
               </div>
               <div className='rounded-full  mx-6 grid grid-cols-1 justify-items-center  h-fit'>
                 <Image
-                  src="/coin.png"
+                  src="/500.png"
                   width={150}
                   height={150}
                   alt="Picture of the author"
                   className='items-centerr'
                   onClick={() => setCoin(500)} />
-                <p>
-                  500
-                </p>
+
               </div>
               <div className='rounded-full mx-6 grid grid-cols-1 justify-items-center  h-fit'>
                 <Image
-                  src="/coin.png"
+                  src="/1000.png"
                   width={150}
                   height={150}
                   alt="Picture of the author"
                   className='items-centerr'
                   onClick={() => setCoin(1000)} />
-                <p>
-                  1000
-                </p>
+
               </div>
             </div>
             <div>
